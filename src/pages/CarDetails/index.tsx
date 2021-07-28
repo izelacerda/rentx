@@ -91,11 +91,9 @@ export function CarDetails() {
         ]}
       >
         <Header>
-            <BackButton onPress={handleBack}/>
+          <BackButton onPress={handleBack} />
         </Header>
-        <Animated.View
-          style={[sliderCarsStyleAmination]}
-        >
+        <Animated.View style={sliderCarsStyleAmination}>
           <CarImages>
             <ImageSlider 
               imagesUrl={car.photos}
@@ -107,7 +105,7 @@ export function CarDetails() {
       <Animated.ScrollView
        contentContainerStyle={{
           paddingHorizontal: 24,
-          paddingTop: getStatusBarHeight()+160,
+          paddingTop: getStatusBarHeight() + 160,
         }}
         showsVerticalScrollIndicator={false}
         onScroll={scrollHandler}
@@ -119,8 +117,8 @@ export function CarDetails() {
             <Name>{car.name}</Name>
           </Description>
           <Rent>
-            <Period>{car.rent.period}</Period>
-            <Price>R$ {car.rent.price}</Price>
+            <Period>{car.period}</Period>
+            <Price>R$ {car.price}</Price>
           </Rent>
         </Details>
         <Accessories>
@@ -134,9 +132,6 @@ export function CarDetails() {
             ))
           }
         </Accessories>
-        <About>{car.about}</About>
-        <About>{car.about}</About>
-        <About>{car.about}</About>
         <About>{car.about}</About>
       </Animated.ScrollView>
       <Footer>

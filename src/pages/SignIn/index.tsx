@@ -10,6 +10,7 @@ import {
 import * as Yup from 'yup';
 
 import theme from '../../global/styles/theme';
+import { useAuth } from '../../hooks/auth';
 
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
@@ -29,6 +30,8 @@ export function SignIn(){
   const [password, setPassword] = useState('')
   const navigation = useNavigation();
 
+  const { signIn } = useAuth();
+
   async function handleSignIn() {
     try {
       const schema = Yup.object().shape({
@@ -40,6 +43,7 @@ export function SignIn(){
       });
       await schema.validate({ email, password })
       
+      signIn({email, password});
     } catch (error) {
       if(error instanceof Yup.ValidationError) {
         return Alert.alert('Opa',error.message);
@@ -95,7 +99,7 @@ export function SignIn(){
             <Button 
               title="Login"
               onPress={handleSignIn}
-              enabled={false}
+              enabled={true}
               loading={false}
               />
             <Button 

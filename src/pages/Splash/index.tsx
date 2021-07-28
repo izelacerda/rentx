@@ -52,7 +52,7 @@ export function  Splash() {
   });
   async function startApp() {
     await timeout(1000);
-    navigation.navigate('Home');
+    navigation.navigate('SignIn');
   }
   useEffect(() => {
     splashAnimation.value = withTiming(
