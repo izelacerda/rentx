@@ -14,7 +14,7 @@ import { useAuth } from '../../hooks/auth';
 
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
-import { PassWordInput } from '../../components/PassWordInput';
+import { PasswordInput } from '../../components/PasswordInput';
 
 import {
   Container,
@@ -88,7 +88,7 @@ export function SignIn(){
               onChangeText={setEmail}
               value={email}
             />
-            <PassWordInput
+            <PasswordInput
               iconName="lock"
               placeholder="Senha"
               onChangeText={setPassword}

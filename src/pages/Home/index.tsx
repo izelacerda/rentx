@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar } from 'react-native';
+import { Alert, StatusBar } from 'react-native';
 // import { StyleSheet, StatusBar, BackHandler } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 // import { RectButton, PanGestureHandler } from 'react-native-gesture-handler';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import { useNavigation } from '@react-navigation/native';
 // import { Ionicons } from '@expo/vector-icons';
@@ -64,6 +65,7 @@ export function Home(){
 
   // });
 
+  const netInfo = useNetInfo();
   const navigation = useNavigation();
   // const theme = useTheme();
 
@@ -95,7 +97,13 @@ export function Home(){
       isMounted = false;
     }
   },[])
-
+  useEffect(() => {
+    if(netInfo.isConnected) {
+      Alert.alert('Você esta On-line!');
+    } else{
+      Alert.alert('Você esta Off-line!');
+    }
+  },[netInfo.isConnected])
   // useEffect(() => {
   //   BackHandler.addEventListener('hardwareBackPress', () => {
   //     return true;

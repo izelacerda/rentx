@@ -14,7 +14,7 @@ interface Props extends TextInputProps {
   iconName: React.ComponentProps<typeof Feather>['name'];
   value?: string;
 }
-export function PassWordInput({
+export function PasswordInput({
   iconName,
   value,
   ...rest
@@ -49,6 +49,7 @@ export function PassWordInput({
         onFocus={() => handleInputFocus(true)}
         onBlur={() => handleInputFocus(false)}
         isFocused={isFocused}
+        autoCorrect={false}
         {...rest}
       />
       <BorderlessButton onPress={handlePassWordVisibilityChange}>

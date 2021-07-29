@@ -15,7 +15,7 @@ import { api } from '../../../services/api';
 import { BackButton } from '../../../components/BackButton';
 import { Bullet } from '../../../components/Bullet';
 import { Button } from '../../../components/Button';
-import { PassWordInput } from '../../../components/PassWordInput';
+import { PasswordInput } from '../../../components/PasswordInput';
 
 
 import {
@@ -95,13 +95,13 @@ export function SecondStep(){
           </SubTitle>
           <Form>
             <FormTitle>2. Senha</FormTitle>
-            <PassWordInput
+            <PasswordInput
               iconName="lock"
               placeholder="Senha"
               onChangeText={setPassword}
               value={password}
             />
-            <PassWordInput
+            <PasswordInput
               iconName="lock"
               placeholder="Repetir Senha"
               onChangeText={setPasswordConfirm}
