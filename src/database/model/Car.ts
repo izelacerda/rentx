@@ -11,7 +11,7 @@ class Car extends Model {
   brand!: string;
   
   @field('about')
-  email!: string;
+  about!: string;
 
   @field('fuel_type')
   fuel_type!: string;
@@ -23,7 +23,7 @@ class Car extends Model {
   price!: number;
 
   @field('thumbnail')
-  thumbnail!: number;
+  thumbnail!: string;
 }
 
 export { Car }

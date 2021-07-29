@@ -9,9 +9,11 @@ import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import * as Yup from 'yup';
+import { Feather } from '@expo/vector-icons';
+
 import { useAuth } from '../../hooks/auth';
 import { useTheme  } from 'styled-components';
-import { Feather } from '@expo/vector-icons';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 import { BackButton } from '../../components/BackButton';
 import { Input } from '../../components/Input';
@@ -37,6 +39,7 @@ import {
 export function Profile() {
   const { user, signOut, updateUser } = useAuth();
   const theme = useTheme();
+  const netInfo = useNetInfo();
 
   const [option, setOption] = useState<'dataEdit' | 'passwordEdit'>('dataEdit');
   const [avatar, setAvatar] = useState(user.avatar);
@@ -50,7 +53,11 @@ export function Profile() {
   }
 
   function handleOptionChange(option: 'dataEdit' | 'passwordEdit') {
-    setOption(option);
+    if(netInfo.isConnected === false && option === 'passwordEdit') {
+      Alert.alert('Offline','Para mudar a senha conecte-se a Internet!');
+    } else {
+      setOption(option);
+    }
   }
   function handleSignOut() {
     Alert.alert(
