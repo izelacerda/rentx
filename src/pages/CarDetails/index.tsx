@@ -47,6 +47,7 @@ export function CarDetails() {
 
   const navigation = useNavigation();
   const route = useRoute();
+  console.log('allll')
   const { car } = route.params as Params;
 
   const theme = useTheme();

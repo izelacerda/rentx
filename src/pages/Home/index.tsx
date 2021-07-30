@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar } from 'react-native';
+import { Alert, StatusBar } from 'react-native';
 // import { StyleSheet, StatusBar, BackHandler } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useNavigation } from '@react-navigation/native';
@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useNetInfo } from '@react-native-community/netinfo';
 
 import { synchronize } from '@nozbe/watermelondb/sync';
+import BackgroundTimer from 'react-native-background-timer';
 
 import { database } from '../../database';
 // import { Ionicons } from '@expo/vector-icons';
@@ -37,6 +38,55 @@ import {
   CarList,
 } from './styles';
 
+async function offlineSynchronize() {
+  try {
+    console.log('rodou 1')
+    await synchronize({
+      database,
+      pullChanges: async ({ lastPulledAt }) => {
+        console.log('rodou 1.5')
+        let response;
+        try {
+           response = await api
+          .get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`);
+          console.log('rodou 1.6')
+            
+        } catch (error) {
+          console.log(error)          
+        }
+        const { changes, latestVersion } = response.data;
+
+        // console.log('SERVIDOR ENVIA PARA APP')
+        // console.log(changes);
+        // console.log(response.data)
+        console.log('rodou 2')
+        return { changes, timestamp: latestVersion}
+
+      },
+      pushChanges: async ({ changes }) => {
+        // console.log('APP ENVIA PARA SERVIDOR')
+        // console.log(changes);
+        console.log('rodou 3')
+        const user = changes.users;
+        await api.post('/users/sync', user);
+      }
+    });
+    console.log('rodou 4')
+      
+  } catch (error) {
+    console.log('rodou erro')
+    console.log(error);
+    throw new Error(error);      
+  } finally {
+    console.log('rodou')
+  }
+  console.log('rodou 6')
+}
+BackgroundTimer.runBackgroundTimer(() => { 
+  console.log('vai rodar')
+  offlineSynchronize();
+  }, 
+  10000);
 export function Home(){
   const [cars, setCars] = useState<ModelCar[]>([])
   const [loading, setLoading] = useState(true);
@@ -79,36 +129,7 @@ export function Home(){
   // function handleMyOpenCars() {
   //   navigation.navigate('MyCars');
   // }
-  async function offlineSynchronize() {
-    try {
-      await synchronize({
-        database,
-        pullChanges: async ({ lastPulledAt }) => {
-          const response = await api
-          .get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`);
   
-          const { changes, latestVersion } = response.data;
-  
-          // console.log('SERVIDOR ENVIA PARA APP')
-          // console.log(changes);
-          // console.log(response.data)
-  
-          return { changes, timestamp: latestVersion}
-  
-        },
-        pushChanges: async ({ changes }) => {
-          // console.log('APP ENVIA PARA SERVIDOR')
-          // console.log(changes);
-          const user = changes.users;
-          await api.post('/users/sync', user);
-        }
-      });
-        
-    } catch (error) {
-      console.log(error);
-      throw new Error(error);      
-    }
-  }
   useEffect(() => {
     let isMounted = true;
     async function fetchCars() {
