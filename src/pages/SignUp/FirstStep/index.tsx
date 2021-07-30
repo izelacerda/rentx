@@ -85,6 +85,8 @@ export function FirstStep(){
               placeholder="Nome"
               onChangeText={setName}
               value={name}
+              autoCorrect={false}
+              autoCapitalize="none"
             />
             <Input 
               iconName="mail"
@@ -92,6 +94,8 @@ export function FirstStep(){
               keyboardType="email-address"
               onChangeText={setEmail}
               value={email}
+              autoCorrect={false}
+              autoCapitalize="none"
             />
             <Input 
               iconName="credit-card"

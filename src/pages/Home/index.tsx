@@ -23,7 +23,7 @@ import { database } from '../../database';
 
 import Logo from '../../assets/logo.svg';
 import { api } from '../../services/api';
-import { CarDTO } from '../../dtos/CarDTO';
+// import { CarDTO } from '../../dtos/CarDTO';
 
 import { Car } from '../../components/Car';
 import { Car as ModelCar } from '../../database/model/Car';
@@ -73,35 +73,41 @@ export function Home(){
   const navigation = useNavigation();
   // const theme = useTheme();
 
-  function handleCarDetails(car: CarDTO) {
+  function handleCarDetails(car: ModelCar) {
     navigation.navigate('CarDetails', { car });
   }
   // function handleMyOpenCars() {
   //   navigation.navigate('MyCars');
   // }
   async function offlineSynchronize() {
-    await synchronize({
-      database,
-      pullChanges: async ({ lastPulledAt }) => {
-        const response = await api
-        .get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`);
-
-        const { changes, latestVersion } = response.data;
-
-        // console.log('SERVIDOR ENVIA PARA APP')
-        // console.log(changes);
-        // console.log(response.data)
-
-        return { changes, timestamp: latestVersion}
-
-      },
-      pushChanges: async ({ changes }) => {
-        // console.log('APP ENVIA PARA SERVIDOR')
-        // console.log(changes);
-        const user = changes.users;
-        await api.post('/users/sync', user);
-      }
-    });
+    try {
+      await synchronize({
+        database,
+        pullChanges: async ({ lastPulledAt }) => {
+          const response = await api
+          .get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`);
+  
+          const { changes, latestVersion } = response.data;
+  
+          // console.log('SERVIDOR ENVIA PARA APP')
+          // console.log(changes);
+          // console.log(response.data)
+  
+          return { changes, timestamp: latestVersion}
+  
+        },
+        pushChanges: async ({ changes }) => {
+          // console.log('APP ENVIA PARA SERVIDOR')
+          // console.log(changes);
+          const user = changes.users;
+          await api.post('/users/sync', user);
+        }
+      });
+        
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);      
+    }
   }
   useEffect(() => {
     let isMounted = true;
