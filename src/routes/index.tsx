@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer}  from '@react-navigation/native';
 import { useAuth } from '../hooks/auth';
 
-import { AppTabRoutes } from './app.tab.routes';
+import { AppDrawerRoutes } from './app.drawer.routes';
 import { AuthRoutes } from './auth.routes';
 import { Load } from '../components/Load';
 
@@ -11,7 +11,7 @@ export function Routes(){
   return (
     loading ? <Load /> :
     <NavigationContainer>
-      { user.id ? <AppTabRoutes /> : <AuthRoutes />}
+      { user.id ? <AppDrawerRoutes /> : <AuthRoutes />}
     </NavigationContainer>
   );
 }

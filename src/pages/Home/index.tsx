@@ -43,17 +43,21 @@ async function offlineSynchronize() {
     console.log('rodou 1')
     await synchronize({
       database,
+      // pullChanges: async ({ lastPulledAt, schemaVersion, migration }) => {
+      //   const urlParams = `last_pulled_at=${lastPulledAt}&schema_version=${schemaVersion}&migration=${encodeURIComponent(JSON.stringify(migration))}`
+      //   const response = await fetch(`https://my.backend/sync?${urlParams}`)
+      //   if (!response.ok) {
+      //     throw new Error(await response.text())
+      //   }
+  
+      //   const { changes, timestamp } = await response.json()
+      //   return { changes, timestamp }
+      // },
       pullChanges: async ({ lastPulledAt }) => {
         console.log('rodou 1.5')
-        let response;
-        try {
-           response = await api
-          .get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`);
-          console.log('rodou 1.6')
-            
-        } catch (error) {
-          console.log(error)          
-        }
+        const response = await api
+        .get(`cars/sync/pull?lastPulledVersion=${lastPulledAt || 0}`);
+        console.log('rodou 1.6')
         const { changes, latestVersion } = response.data;
 
         // console.log('SERVIDOR ENVIA PARA APP')
@@ -69,7 +73,8 @@ async function offlineSynchronize() {
         console.log('rodou 3')
         const user = changes.users;
         await api.post('/users/sync', user);
-      }
+      },
+      _unsafeBatchPerCollection: false,
     });
     console.log('rodou 4')
       
@@ -82,11 +87,11 @@ async function offlineSynchronize() {
   }
   console.log('rodou 6')
 }
-BackgroundTimer.runBackgroundTimer(() => { 
+BackgroundTimer.runBackgroundTimer(async () => { 
   console.log('vai rodar')
-  offlineSynchronize();
+  await offlineSynchronize();
   }, 
-  10000);
+  3000);
 export function Home(){
   const [cars, setCars] = useState<ModelCar[]>([])
   const [loading, setLoading] = useState(true);
@@ -156,11 +161,11 @@ export function Home(){
     }
   },[])
 
-  useEffect(()=>{
-    if(netInfo.isConnected === true) {
-      offlineSynchronize();
-    }
-  },[netInfo.isConnected]);
+  // useEffect(()=>{
+  //   if(netInfo.isConnected === true) {
+  //     offlineSynchronize();
+  //   }
+  // },[netInfo.isConnected]);
 
   // useEffect(() => {
   //   if(netInfo.isConnected) {

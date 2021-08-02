@@ -7,11 +7,13 @@ import HomeSvg from '../assets/home.svg';
 import CarSvg from '../assets/car.svg';
 import PeopleSvg from '../assets/people.svg';
 
+
 import { AppStackRoutes } from './app.stack.routes';
 import  { MyCars } from '../pages/MyCars';
 import  { Profile } from '../pages/Profile';
 
 const { Navigator, Screen } = createBottomTabNavigator();
+
 
 export function AppTabRoutes(){
   const theme = useTheme();
